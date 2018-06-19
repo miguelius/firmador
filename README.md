@@ -95,7 +95,7 @@ keytool -genkey -keyalg rsa -alias key -keystore keystore.jks
 ```
 * En cada sesión de compilación, ejecutar
 ```
-	export FIRMADOR_STORE=keystore.jks
+	export FIRMADOR_KEYSTORE=keystore.jks
 	export FIRMADOR_ALIAS=key
 	export FIRMADOR_STOREPASS=password
 	export FIRMADOR_KEYPASS=password
