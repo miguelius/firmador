@@ -102,6 +102,7 @@ public class FirmaControler {
 				break;
 			}
 		}
+		mainWindow.getPdfControler().descargarProvider();
 	
 		if (ok) {
 			//Borra archivos sin firmar			
@@ -134,6 +135,9 @@ public class FirmaControler {
 		}
 		try {
 			if (firmarDocumentoPdf(container, documento)) {
+				if (!mainWindow.getSignProps().isMultiple()) {
+					mainWindow.getPdfControler().descargarProvider();
+				}
 				return true;
 			} else {
 				return false;
@@ -213,8 +217,8 @@ public class FirmaControler {
     	return true;
     }
 	/**
-	 * Se muestra la lista de preguntas de confirmaciÛn
-	 * que el usuario deber· responder correctamente
+	 * Se muestra la lista de preguntas de confirmaci√≥n
+	 * que el usuario deber√° responder correctamente
 	 * @param container
 	 * @return
 	 */
@@ -264,6 +268,7 @@ public class FirmaControler {
 		String archivoFirmado = getNombreArchivoFirmado(documento.getArchivoAFirmar());
 		mainWindow.getPdfControler().setNombreArchivoParaFirmar(documento.getArchivoAFirmar().getName());
 		mainWindow.getPdfControler().setNombreArchivoFirmado(archivoFirmado);
+
 		if (mainWindow.getPdfControler().firmarDigitalmenteArchivoPdf()) {
 			myProps.getMapaDatosUsuarioFirma().put("MD5_ARCHIVO", mainWindow.getPdfControler().getMessageDig("MD5", documento.getArchivoAFirmar().getName()));
 			myProps.getMapaDatosUsuarioFirma().put("MD5_ARCHIVO_FIRMADO", mainWindow.getPdfControler().getMessageDig("MD5", archivoFirmado));
@@ -355,7 +360,7 @@ public class FirmaControler {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			mostrarMensajesError(container, "MÈtodo MainWindow.UploadDoc(): "+myProps.getString("errorEnvioDictamenServer") + " "  + documento.getArchivoFirmado().getPath(), e)	;
+			mostrarMensajesError(container, "M√©todo MainWindow.UploadDoc(): "+myProps.getString("errorEnvioDictamenServer") + " "  + documento.getArchivoFirmado().getPath(), e)	;
 		}
 		return false;
 	}

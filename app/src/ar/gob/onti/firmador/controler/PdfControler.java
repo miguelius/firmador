@@ -8,14 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.UnrecoverableKeyException;
+import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509CRL;
@@ -392,9 +385,13 @@ public class PdfControler {
 		if(!secmod.isInitialized()){
 			for (int n = 0; n < cfgProvider.length; n++) {
                 //System.out.println("Provider " + cfgProvider[n]);
-				SunPKCS11 provider = new SunPKCS11(new ByteArrayInputStream(cfgProvider[n].getBytes()));
-				Security.addProvider(provider);
-				sunpkcs.add(provider);
+				try {
+					SunPKCS11 provider = new SunPKCS11(new ByteArrayInputStream(cfgProvider[n].getBytes()));
+					Security.addProvider(provider);
+					sunpkcs.add(provider);
+				} catch (ProviderException pex) {
+					System.out.println("Driver cargado, pero el dispositivo no esta disponible: " + cfgProvider[n]);
+				}
 			}
 		}
 		else {
@@ -768,7 +765,9 @@ public class PdfControler {
 			firmaYverificacionPdf(sap);
 			retValue = true;
 			PropsConfig.getInstance().setMapaDatosUsuarioFirma(currentKeyStoreData.getMapaSubjectDN());
-			descargarProvider();
+			if (! PropsConfig.getInstance().isMultiple()) {
+				// descargarProvider();
+			}
 		}	catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 			cargarMensajeDeError(PropsConfig.getInstance().getString("errorFirma"),errOpera,e);
@@ -806,7 +805,7 @@ public class PdfControler {
 	}	
 	
 	public void finalize () {
-	    descargarProvider();
+	    // descargarProvider();
 	}
 
 	public boolean isKeyStoreOpen(OriginType originType) {
