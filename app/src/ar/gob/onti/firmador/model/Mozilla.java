@@ -141,7 +141,7 @@ public class Mozilla {
 
 			JSObject document = (JSObject) JSCommands.getWindow().getMember("navigator");
 			String userAgent = ((String) document.getMember("userAgent")).toLowerCase();
-
+/*
 			//if (userAgent.contains("x86_64")) {
 				if (new File("/lib64/libsoftokn3.so").exists()) {
 					System.out.println("[Mozilla]::Se ha encontrado la carpeta con las librerías de Mozilla Firefox en Linux/Unix: /lib64");
@@ -185,6 +185,7 @@ public class Mozilla {
 					return new File("/usr/lib/nss");
 				}				
 			//}
+*/
 		}
 		
 		//-- Si el SO es Mac OS X
